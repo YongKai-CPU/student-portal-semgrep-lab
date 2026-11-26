@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>My Profile</h2>
+<p><strong>Username:</strong> {{ user.username }} &nbsp; <strong>Role:</strong> {{ user.role }}</p>
+<form method="post">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <label>Full name</label>
+  <input name="full_name" maxlength="100" value="{{ user.full_name or '' }}" required>
+  <label>Email</label>
+  <input name="email" type="email" maxlength="120" value="{{ user.email or '' }}" required>
+  <label>Phone</label>
+  <input name="phone" maxlength="20" value="{{ user.phone or '' }}">
+  <button class="primary" type="submit">Update profile</button>
+</form>
+{% endblock %}

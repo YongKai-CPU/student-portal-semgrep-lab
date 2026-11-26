@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Messages</h2>
+<form method="post">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <label>To</label>
+  <select name="recipient" required>
+    {% for u in users %}<option value="{{ u.username }}">{{ u.username }}</option>{% endfor %}
+  </select>
+  <label>Message</label>
+  <textarea name="body" rows="4" maxlength="1000" required></textarea>
+  <button class="primary" type="submit">Send</button>
+</form>
+<h3>Inbox</h3>
+<table><tr><th>From</th><th>Message</th><th>Sent</th></tr>
+{% for m in inbox %}<tr><td>{{ m.sender }}</td><td>{{ m.body }}</td><td>{{ m.sent_at }}</td></tr>
+{% else %}<tr><td colspan="3">No messages.</td></tr>{% endfor %}
+</table>
+<h3>Sent</h3>
+<table><tr><th>To</th><th>Message</th><th>Sent</th></tr>
+{% for m in sent %}<tr><td>{{ m.recipient }}</td><td>{{ m.body }}</td><td>{{ m.sent_at }}</td></tr>
+{% else %}<tr><td colspan="3">No sent messages.</td></tr>{% endfor %}
+</table>
+{% endblock %}

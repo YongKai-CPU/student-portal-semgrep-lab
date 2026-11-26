@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Assignments</h2>
+{% if session.role == 'student' %}
+<form method="post" enctype="multipart/form-data">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <label>Title</label>
+  <input name="title" maxlength="100" required>
+  <label>File (pdf, docx, txt, zip — max 5 MB)</label>
+  <input type="file" name="file" accept=".pdf,.docx,.txt,.zip" required>
+  <button class="primary" type="submit">Submit assignment</button>
+</form>
+{% endif %}
+<h3>{{ 'All submissions' if session.role == 'lecturer' else 'My submissions' }}</h3>
+<table>
+  <tr>{% if session.role == 'lecturer' %}<th>Student</th>{% endif %}<th>Title</th><th>File</th><th>Submitted</th></tr>
+  {% for a in assignments %}
+  <tr>
+    {% if session.role == 'lecturer' %}<td>{{ a.username }}</td>{% endif %}
+    <td>{{ a.title }}</td>
+    <td><a href="{{ url_for('download_assignment', assignment_id=a.id) }}">{{ a.original_name }}</a></td>
+    <td>{{ a.submitted_at }}</td>
+  </tr>
+  {% else %}<tr><td colspan="4">No submissions.</td></tr>{% endfor %}
+</table>
+{% endblock %}
